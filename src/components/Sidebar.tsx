@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, Store, User, LogOut } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Store, User, Video, Clock, DollarSign, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 const navItems = [
   { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { path: '/ai-tools', icon: Sparkles, label: 'AI Tools' },
+  { path: '/video-editor', icon: Video, label: 'Video Editor' },
+  { path: '/publish-insights', icon: Clock, label: 'Publish Insights' },
+  { path: '/monetization', icon: DollarSign, label: 'Monetization' },
   { path: '/storefront', icon: Store, label: 'Storefront' },
   { path: '/profile', icon: User, label: 'Profile' },
 ];

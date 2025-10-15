@@ -7,6 +7,9 @@ import { useAuthStore } from "@/store/authStore";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import AITools from "./pages/AITools";
+import VideoEditor from "./pages/VideoEditor";
+import PublishInsights from "./pages/PublishInsights";
+import Monetization from "./pages/Monetization";
 import Storefront from "./pages/Storefront";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
@@ -34,6 +37,9 @@ const App = () => {
             <Route element={<Layout />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/ai-tools" element={<AITools />} />
+              <Route path="/video-editor" element={<VideoEditor />} />
+              <Route path="/publish-insights" element={<PublishInsights />} />
+              <Route path="/monetization" element={<Monetization />} />
               <Route path="/storefront" element={<Storefront />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
