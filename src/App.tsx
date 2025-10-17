@@ -11,6 +11,7 @@ import VideoEditor from "./pages/VideoEditor";
 import PublishInsights from "./pages/PublishInsights";
 import Monetization from "./pages/Monetization";
 import Storefront from "./pages/Storefront";
+import HelpDesk from "./pages/HelpDesk";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import { Layout } from "./components/Layout";
@@ -41,6 +42,7 @@ const App = () => {
               <Route path="/publish-insights" element={<PublishInsights />} />
               <Route path="/monetization" element={<Monetization />} />
               <Route path="/storefront" element={<Storefront />} />
+              <Route path="/help-desk" element={<HelpDesk />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="*" element={<NotFound />} />
