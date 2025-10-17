@@ -33,10 +33,10 @@ export default function Profile() {
       className="space-y-8 max-w-4xl mx-auto"
     >
       <div>
-        <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
           Profile
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm md:text-base text-muted-foreground">
           Manage your creator profile and brand identity
         </p>
       </div>
@@ -45,16 +45,16 @@ export default function Profile() {
         {/* Profile Header */}
         <Card className="border-border bg-card/50 backdrop-blur shadow-card">
           <CardContent className="pt-6">
-            <div className="flex items-center gap-6">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               <Avatar className="w-24 h-24 ring-4 ring-primary/20">
                 <AvatarImage src={profile.avatar} />
                 <AvatarFallback>
                   {user?.name?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex-1">
-                <h2 className="text-2xl font-bold">{user?.name}</h2>
-                <div className="flex items-center gap-2 text-muted-foreground mt-1">
+              <div className="flex-1 text-center sm:text-left">
+                <h2 className="text-xl md:text-2xl font-bold">{user?.name}</h2>
+                <div className="flex items-center justify-center sm:justify-start gap-2 text-sm md:text-base text-muted-foreground mt-1">
                   <Mail className="w-4 h-4" />
                   {user?.email}
                 </div>
@@ -157,7 +157,7 @@ export default function Profile() {
             <CardTitle>Portfolio Preview</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4">
               {[1, 2, 3, 4, 5, 6].map((item) => (
                 <motion.div
                   key={item}

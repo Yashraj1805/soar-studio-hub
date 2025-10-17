@@ -85,10 +85,10 @@ export default function AITools() {
       className="space-y-8"
     >
       <div>
-        <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
           AI Tools
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm md:text-base text-muted-foreground">
           Supercharge your content creation with AI-powered tools
         </p>
       </div>
@@ -114,7 +114,7 @@ export default function AITools() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Input</label>
                     <Textarea

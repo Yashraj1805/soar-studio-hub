@@ -37,16 +37,16 @@ export default function Dashboard() {
       className="space-y-8"
     >
       <div>
-        <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
           Dashboard
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm md:text-base text-muted-foreground">
           Track your creator journey and growth metrics
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {stats.map((stat, index) => (
           <motion.div
             key={stat.label}
@@ -58,11 +58,11 @@ export default function Dashboard() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
-                    <h3 className="text-3xl font-bold mt-2">{stat.value}</h3>
-                    <p className="text-sm text-green-500 mt-1">{stat.change}</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">{stat.label}</p>
+                    <h3 className="text-2xl md:text-3xl font-bold mt-2">{stat.value}</h3>
+                    <p className="text-xs md:text-sm text-green-500 mt-1">{stat.change}</p>
                   </div>
-                  <stat.icon className={`w-12 h-12 ${stat.color}`} />
+                  <stat.icon className={`w-10 h-10 md:w-12 md:h-12 ${stat.color}`} />
                 </div>
               </CardContent>
             </Card>
@@ -71,7 +71,7 @@ export default function Dashboard() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -82,7 +82,7 @@ export default function Dashboard() {
               <CardTitle>Growth Analytics</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250} className="md:h-[300px]">
                 <LineChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
@@ -124,7 +124,7 @@ export default function Dashboard() {
               <CardTitle>Monthly Earnings</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250} className="md:h-[300px]">
                 <BarChart data={earningsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />

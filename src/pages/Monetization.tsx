@@ -72,13 +72,13 @@ const Monetization = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             Monetization Dashboard
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm md:text-base text-muted-foreground mt-1">
             Track your earnings and revenue streams
           </p>
         </div>
@@ -89,7 +89,7 @@ const Monetization = () => {
       </motion.div>
 
       {/* Summary Cards */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {summaryCards.map((card, index) => (
           <motion.div
             key={card.title}
@@ -129,7 +129,7 @@ const Monetization = () => {
             <CardDescription>Your earnings over the past 6 months</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250} className="md:h-[300px]">
               <AreaChart data={earningsData}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
@@ -174,20 +174,21 @@ const Monetization = () => {
             <CardDescription>Detailed breakdown of your revenue sources</CardDescription>
           </CardHeader>
           <CardContent>
-            <Table>
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Source</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead className="whitespace-nowrap">Source</TableHead>
+                  <TableHead className="whitespace-nowrap">Date</TableHead>
+                  <TableHead className="whitespace-nowrap">Status</TableHead>
+                  <TableHead className="text-right whitespace-nowrap">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {transactionsData.map((transaction) => (
                   <TableRow key={transaction.id}>
-                    <TableCell className="font-medium">{transaction.source}</TableCell>
-                    <TableCell className="text-muted-foreground">{transaction.date}</TableCell>
+                    <TableCell className="font-medium whitespace-nowrap">{transaction.source}</TableCell>
+                    <TableCell className="text-muted-foreground whitespace-nowrap">{transaction.date}</TableCell>
                     <TableCell>
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -206,6 +207,7 @@ const Monetization = () => {
                 ))}
               </TableBody>
             </Table>
+            </div>
           </CardContent>
         </Card>
       </motion.div>

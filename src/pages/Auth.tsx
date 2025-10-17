@@ -85,7 +85,7 @@ export default function Auth() {
             className="inline-flex items-center gap-2 mb-4"
           >
             <Sparkles className="w-8 h-8 text-primary" />
-            <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
               SochBox
             </h1>
           </motion.div>

@@ -60,13 +60,13 @@ const PublishInsights = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             Publish Insights
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm md:text-base text-muted-foreground mt-1">
             AI-powered analytics to optimize your posting schedule
           </p>
         </div>
@@ -77,7 +77,7 @@ const PublishInsights = () => {
       </motion.div>
 
       {/* AI Recommendations */}
-      <div className="grid md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {aiRecommendations.map((rec, index) => (
           <motion.div
             key={rec.title}
@@ -129,7 +129,7 @@ const PublishInsights = () => {
       </motion.div>
 
       {/* Charts */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Engagement by Hour */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -142,7 +142,7 @@ const PublishInsights = () => {
               <CardDescription>Average engagement throughout the day</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250} className="md:h-[300px]">
                 <LineChart data={engagementByHour}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                   <XAxis dataKey="hour" className="text-xs" />
@@ -179,7 +179,7 @@ const PublishInsights = () => {
               <CardDescription>Weekly engagement patterns</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250} className="md:h-[300px]">
                 <BarChart data={engagementByDay}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                   <XAxis dataKey="day" className="text-xs" />
