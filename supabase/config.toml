@@ -2,3 +2,21 @@ project_id = "xangpqeornxcjyiqbtkh"
 
 [functions.generate-content]
 verify_jwt = false
+
+[functions.instagram-auth]
+verify_jwt = false
+
+[functions.instagram-callback]
+verify_jwt = false
+
+[functions.youtube-auth]
+verify_jwt = false
+
+[functions.youtube-callback]
+verify_jwt = false
+
+[functions.dashboard-data]
+verify_jwt = false
+
+[functions.sync-data]
+verify_jwt = true

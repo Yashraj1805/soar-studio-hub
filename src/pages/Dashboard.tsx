@@ -1,7 +1,14 @@
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, Users, DollarSign, Eye } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { TrendingUp, Users, DollarSign, Eye, RefreshCw, Sparkles, AlertCircle } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import ConnectPlatforms from '@/components/ConnectPlatforms';
 
 const stats = [
   { label: 'Total Followers', value: '12.5K', change: '+12%', icon: Users, color: 'text-primary' },
@@ -30,20 +37,138 @@ const earningsData = [
 ];
 
 export default function Dashboard() {
+  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('dashboard-data');
+      
+      if (error) throw error;
+      
+      setDashboardData(data);
+      
+      if (data.errors && data.errors.length > 0) {
+        toast({
+          title: 'Partial Data',
+          description: 'Some metrics could not be fetched',
+          variant: 'destructive',
+        });
+      }
+    } catch (error: any) {
+      console.error('Error fetching dashboard:', error);
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const syncData = async () => {
+    setSyncing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('sync-data');
+      
+      if (error) throw error;
+      
+      setDashboardData(data.data);
+      toast({
+        title: 'Data Synced',
+        description: 'Dashboard data has been refreshed',
+      });
+    } catch (error: any) {
+      console.error('Error syncing:', error);
+      toast({
+        title: 'Sync Failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const stats = [
+    { 
+      label: 'Total Followers', 
+      value: dashboardData?.instagram?.followers || '12.5K', 
+      change: '+12%', 
+      icon: Users, 
+      color: 'text-primary',
+      platform: 'Instagram'
+    },
+    { 
+      label: 'Engagement Rate', 
+      value: `${dashboardData?.instagram?.engagement_rate || '8.4'}%`, 
+      change: '+2.3%', 
+      icon: TrendingUp, 
+      color: 'text-secondary',
+      platform: 'Instagram'
+    },
+    { 
+      label: 'Subscribers', 
+      value: dashboardData?.youtube?.subscribers?.toLocaleString() || '8.5K', 
+      change: '+18%', 
+      icon: DollarSign, 
+      color: 'text-accent',
+      platform: 'YouTube'
+    },
+    { 
+      label: 'Total Views', 
+      value: dashboardData?.youtube?.views?.toLocaleString() || '145K', 
+      change: '+24%', 
+      icon: Eye, 
+      color: 'text-primary',
+      platform: 'YouTube'
+    },
+  ];
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="space-y-8"
     >
-      <div>
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
-          Dashboard
-        </h1>
-        <p className="text-sm md:text-base text-muted-foreground">
-          Track your creator journey and growth metrics
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
+            Dashboard
+          </h1>
+          <p className="text-sm md:text-base text-muted-foreground">
+            Track your creator journey and growth metrics
+          </p>
+        </div>
+        <Button 
+          onClick={syncData} 
+          disabled={syncing}
+          className="gap-2"
+        >
+          <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
+          {syncing ? 'Syncing...' : 'Sync Data'}
+        </Button>
       </div>
+
+      {dashboardData?.fallback && (
+        <Alert className="border-yellow-500/50 bg-yellow-500/10">
+          <AlertCircle className="h-4 w-4 text-yellow-500" />
+          <AlertDescription>
+            Showing default data. Connect your platforms below to see real metrics.
+            {dashboardData.cached && ' (Using cached data)'}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <ConnectPlatforms />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -58,7 +183,10 @@ export default function Dashboard() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs md:text-sm text-muted-foreground">{stat.label}</p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-xs md:text-sm text-muted-foreground">{stat.label}</p>
+                      <Badge variant="outline" className="text-xs">{stat.platform}</Badge>
+                    </div>
                     <h3 className="text-2xl md:text-3xl font-bold mt-2">{stat.value}</h3>
                     <p className="text-xs md:text-sm text-green-500 mt-1">{stat.change}</p>
                   </div>
@@ -69,6 +197,70 @@ export default function Dashboard() {
           </motion.div>
         ))}
       </div>
+
+      {/* Trending Topics */}
+      {dashboardData?.trending && (
+        <Card className="border-border bg-card/50 backdrop-blur shadow-card">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5" />
+              Trending Topics
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {dashboardData.trending.topics.map((topic: string, index: number) => (
+                <Badge key={index} variant="secondary" className="text-sm">
+                  {topic}
+                </Badge>
+              ))}
+            </div>
+            {dashboardData.trending.notes && (
+              <p className="text-xs text-muted-foreground mt-4">
+                {dashboardData.trending.notes}
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* AI Content Ideas */}
+      {dashboardData?.ai?.ideas && dashboardData.ai.ideas.length > 0 && (
+        <Card className="border-border bg-card/50 backdrop-blur shadow-card">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5" />
+              AI-Powered Content Ideas
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {dashboardData.ai.ideas.map((idea: any, index: number) => (
+                <Card key={index} className="border-border">
+                  <CardHeader>
+                    <CardTitle className="text-base">{idea.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">Script:</p>
+                      <p className="text-sm">{idea.script}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">Caption:</p>
+                      <p className="text-sm">{idea.caption}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">Thumbnail Prompt:</p>
+                      <p className="text-xs text-muted-foreground italic">{idea.thumbnail_prompt}</p>
+                    </div>
+                    <Button size="sm" className="w-full">Use This Idea</Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
