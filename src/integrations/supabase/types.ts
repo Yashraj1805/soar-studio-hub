@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      connected_accounts: {
+        Row: {
+          access_token: string
+          account_id: string
+          account_metadata: Json | null
+          account_username: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          platform: string
+          refresh_token: string | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token: string
+          account_id: string
+          account_metadata?: Json | null
+          account_username?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform: string
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string
+          account_id?: string
+          account_metadata?: Json | null
+          account_username?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform?: string
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      dashboard_cache: {
+        Row: {
+          created_at: string
+          data: Json
+          error_message: string | null
+          id: string
+          last_synced: string
+          platform: string
+          sync_status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          error_message?: string | null
+          id?: string
+          last_synced?: string
+          platform: string
+          sync_status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          error_message?: string | null
+          id?: string
+          last_synced?: string
+          platform?: string
+          sync_status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
