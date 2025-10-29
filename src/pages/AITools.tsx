@@ -61,8 +61,57 @@ export default function AITools() {
 
     setLoading({ ...loading, [tool.id]: true });
 
-    // Simulate API call with mock data
-    setTimeout(() => {
+    try {
+      // Call backend AI function
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-content`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ type: tool.id, input }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        
+        // Handle rate limiting
+        if (response.status === 429) {
+          toast({
+            title: 'Rate limit exceeded',
+            description: 'Too many requests. Using fallback content.',
+            variant: 'destructive',
+          });
+          throw new Error('Rate limited');
+        }
+        
+        // Handle payment required
+        if (response.status === 402) {
+          toast({
+            title: 'AI credits exhausted',
+            description: 'Please add credits. Using fallback content.',
+            variant: 'destructive',
+          });
+          throw new Error('Payment required');
+        }
+        
+        throw new Error(errorData.error || 'API call failed');
+      }
+
+      const data = await response.json();
+      setOutputs({ ...outputs, [tool.id]: data.content });
+      setLoading({ ...loading, [tool.id]: false });
+      toast({
+        title: 'Generated successfully!',
+        description: 'Your AI-powered content is ready.',
+      });
+    } catch (error) {
+      // Graceful fallback to mock data if API fails
+      console.error('AI generation failed, using fallback:', error);
+      
       const mockOutputs: Record<string, string> = {
         idea: `📱 Top 5 ${input} trends for 2025\n🎯 How to master ${input} in 30 days\n💡 Common ${input} mistakes to avoid\n🚀 ${input} success stories from real creators\n⚡ Quick ${input} tips for beginners`,
         caption: `🔥 Ready to transform your ${input}? Here's what you need to know! 👇\n\nIn today's video, I'm breaking down the EXACT strategy that helped me [achieve result]. Whether you're just starting out or looking to level up, these tips will change the game for you.\n\n✨ What you'll learn:\n• Key strategy #1\n• Key strategy #2\n• Key strategy #3\n\nDrop a 💯 if you found this helpful! Let me know in the comments which tip you'll try first.\n\n#${input.replace(/\s+/g, '')} #ContentCreator #GrowthTips`,
@@ -71,11 +120,14 @@ export default function AITools() {
 
       setOutputs({ ...outputs, [tool.id]: mockOutputs[tool.id] });
       setLoading({ ...loading, [tool.id]: false });
-      toast({
-        title: 'Generated successfully!',
-        description: 'Your AI-powered content is ready.',
-      });
-    }, 2000);
+      
+      if (error instanceof Error && !error.message.includes('Rate limited') && !error.message.includes('Payment required')) {
+        toast({
+          title: 'Using fallback content',
+          description: 'AI service unavailable. Generated basic content instead.',
+        });
+      }
+    }
   };
 
   return (
