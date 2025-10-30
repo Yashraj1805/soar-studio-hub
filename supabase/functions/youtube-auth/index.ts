@@ -46,7 +46,7 @@ serve(async (req) => {
       JSON.stringify({ authUrl }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating YouTube auth URL:', error);
     return new Response(
       JSON.stringify({ error: error.message }),

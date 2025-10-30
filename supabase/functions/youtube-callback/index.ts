@@ -93,7 +93,7 @@ serve(async (req) => {
       `<html><body><script>window.opener.postMessage({type:'youtube_success',data:${JSON.stringify(connectionData)}},'*');window.close();</script></body></html>`,
       { headers: { 'Content-Type': 'text/html' } }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error('YouTube callback error:', error);
     return new Response(
       `<html><body><script>window.opener.postMessage({type:'youtube_error',error:'${error.message}'},'*');window.close();</script></body></html>`,
